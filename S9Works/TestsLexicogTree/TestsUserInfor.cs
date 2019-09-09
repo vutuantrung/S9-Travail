@@ -9,10 +9,13 @@ namespace TestsLexicogTree
     [TestFixture]
     class T1UserTests
     {
-        [Test]
-        public void unit_test_example1()
+        [TestCase("abcd")]
+        public void can_add_name(string name)
         {
-
+            Tree lexicogTree = new Tree();
+            lexicogTree.AddName("abcd");
+            lexicogTree.AddName("abab");
+            lexicogTree.Print();
         }
 
         [Test]

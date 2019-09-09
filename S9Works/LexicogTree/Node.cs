@@ -6,10 +6,10 @@ namespace LexicogTree
 {
     public class Node
     {
-        public char Letter { get; set; }
+        public char Letter;
 
-        public Node BrotherNode { get; set; }
+        public Node BrotherNode;
 
-        public Node SonNode { get; set; }
+        public Node SonNode;
     }
 }

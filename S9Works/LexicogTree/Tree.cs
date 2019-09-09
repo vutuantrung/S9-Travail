@@ -1,21 +1,63 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Text;
 
 namespace LexicogTree
 {
     public class Tree
     {
-        public Node Root { get; set; }
+        public Node Root;
+
+        public Node Iterator { get; set; }
 
         public Tree()
         {
             Root = null;
         }
 
-        public void AddNode()
+        public void AddName(string word)
         {
-            throw new NotImplementedException();
+            AddWord(ref Root, word, 0);
+        }
+
+        public void AddWord(ref Node nod, string word, int index)
+        {
+            if (index >= word.Length) return;
+            if (nod == null)
+            {
+                nod = new Node
+                {
+                    Letter = word[index],
+                    BrotherNode = null,
+                    SonNode = null
+                };
+                AddWord(ref nod.SonNode, word, index + 1);
+            }
+            else
+            {
+                if (nod.Letter != word[index])
+                {
+                    if (nod.BrotherNode != null)
+                    {
+                        AddWord(ref nod.BrotherNode, word, index);
+                    }
+                    else
+                    {
+                        nod.BrotherNode = new Node
+                        {
+                            Letter = word[index],
+                            BrotherNode = null,
+                            SonNode = null
+                        };
+                        AddWord(ref nod.BrotherNode.SonNode, word, ++index);
+                    }
+                }
+                else
+                {
+                    AddWord(ref nod.SonNode, word, ++index);
+                }
+            }
         }
 
         public void DeleteNode()
@@ -36,6 +78,22 @@ namespace LexicogTree
         public bool SearchNode()
         {
             throw new NotImplementedException();
+        }
+
+        public void Print()
+        {
+            Node broIter = Root;
+            while (broIter != null)
+            {
+                Node sonIter = broIter;
+                while (sonIter != null)
+                {
+                    Debug.Write(sonIter.Letter);
+                    sonIter = sonIter.SonNode;
+                }
+                broIter = broIter.BrotherNode;
+                Debug.WriteLine("");
+            }
         }
     }
 }
