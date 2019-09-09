@@ -10,27 +10,13 @@ namespace TestsLexicogTree
     class T1UserTests
     {
         [Test]
-        public void can_create_user()
+        public void unit_test_example1()
         {
-            UserInfor userExample = new UserInfor
-            {
-                FirstName = "VU",
-                LastName = "Tuan Trung",
-                Age = 25,
-                UserType = UserType.Administrator
-            };
-            Assert.That(userExample.FirstName == "VU");
-            Assert.That(userExample.LastName == "Tuan Trung");
-            Assert.That(userExample.Age == 25);
-            Assert.That(userExample.UserType == UserType.Administrator);
 
-            Assert.Throws<ArgumentException>(() => { userExample.FirstName = string.Empty; }, "Invalid First name.");
-            Assert.Throws<ArgumentException>(() => { userExample.LastName = string.Empty; }, "Invalid Last name.");
-            Assert.Throws<ArgumentException>(() => { userExample.Age = -1; }, "Invalid Age.");
         }
 
         [Test]
-        public void unit_test_example()
+        public void unit_test_example2()
         {
 
         }
