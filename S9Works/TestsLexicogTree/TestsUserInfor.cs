@@ -1,10 +1,10 @@
-﻿using NUnit.Framework;
+﻿using LexicogTree;
+using NUnit.Framework;
 using System;
 using System.Collections.Generic;
 using System.Text;
-using UserDirStructure;
 
-namespace TestsUserDirStructure
+namespace TestsLexicogTree
 {
     [TestFixture]
     class T1UserTests
