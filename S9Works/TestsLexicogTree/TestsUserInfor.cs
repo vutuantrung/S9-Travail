@@ -34,7 +34,7 @@ namespace TestsLexicogTree
 
             for (int i = 0; i < names.Length; i++)
             {
-                lexicogTree.AddName(names[i].ToString());
+                lexicogTree.SearchNode(names[i].ToString());
             }
         }
     }
