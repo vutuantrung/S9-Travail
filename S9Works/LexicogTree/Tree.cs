@@ -81,10 +81,13 @@ namespace LexicogTree
 
         public void SearchByLengthRec(ref Node nod, int length, List<string> words, string currentword)
         {
+            // Si la node est vide (notamment après un appel du frère)
             if (nod == null) return;
 
+            // Si la length est atteinte on regarde si on trouve un end of word
             if(currentword.Length >= length)
             {
+                // Si on en trouve une on ajoute le mot actuel
                 if (SearchWord(ref nod, "", 0))
                 {
                     words.Add(currentword);
@@ -92,10 +95,10 @@ namespace LexicogTree
             }
             else
             {
-                // boucle sur le frère
+                // On boucle sur le frère
                 SearchByLengthRec(ref nod.BrotherNode, length, words, currentword);
 
-                // ajoute la lettre et continue sur le fils si c'est pas un end of word
+                // On ajoute la lettre et continue sur le fils si c'est pas un end of word
                 if (nod.Letter != '#')
                 {
                     currentword += nod.Letter;
