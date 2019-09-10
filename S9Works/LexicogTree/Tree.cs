@@ -80,7 +80,7 @@ namespace LexicogTree
             try
             {
                 if (!SearchNode(word)) throw new Exception("This word doesn't exist.");
-                DeleteNodeRec(ref _root, word, 0);
+                DeleteNodeRec(ref _root, word + "#", 0);
             }
             catch (Exception ex)
             {
@@ -92,23 +92,32 @@ namespace LexicogTree
         {
             bool deleateMore = true;
             // Si la taille du mot est atteinte c'est bon.
-            if (index >= word.Length)
-            {
-                // Si un frère existe seul le end of word est à supprimer
-                deleateMore = nod.BrotherNode != null;
-                nod = nod.BrotherNode;
-            }
-
-            // on compare la lettre à notre mot
+            //if (index >= word.Length)
+            //{
+            //    // Si un frère existe seul le end of word est à supprimer
+            //    deleateMore = nod.BrotherNode != null;
+            //    nod = nod.BrotherNode;
+            //}
+            //else
+            //{
+                // on compare la lettre à notre mot
             if (word[index] == nod.Letter)
             {
-                // Si c'est bon on boucle sur le fils
-                if (DeleteNodeRec(ref nod.SonNode, word, index + 1))
+                if (index >= word.Length - 1)   // 0  2         1  2
                 {
-                    // On supprime si on le doit
-                    deleateMore = nod.BrotherNode != null;
+                    deleateMore = nod.BrotherNode == null;
                     nod = nod.BrotherNode;
                 }
+                        
+                // Si c'est bon on boucle sur le fils
+                else if (DeleteNodeRec(ref nod.SonNode, word, index + 1))
+                {
+                    // On supprime si on le doit
+                    deleateMore = nod.BrotherNode == null;
+                    nod = nod.BrotherNode;
+                }
+                else
+                    deleateMore = false;
             }
             else
             {
@@ -116,10 +125,13 @@ namespace LexicogTree
                 if (DeleteNodeRec(ref nod.BrotherNode, word, index))
                 {
                     // On supprime si on le doit
-                    deleateMore = nod.BrotherNode != null;
+                    deleateMore = nod.BrotherNode == null;
                     nod = nod.BrotherNode;
                 }
+                else
+                    deleateMore = false;
             }
+            //}
 
             return deleateMore;
         }
