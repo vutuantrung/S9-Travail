@@ -67,11 +67,14 @@ namespace LexicogTree
             throw new NotImplementedException();
         }
 
-        public char Prefix()
+        // Retourne tout les mots contenant le prefix suivant
+        public List<string> Prefix()
         {
+
             throw new NotImplementedException();
         }
 
+        // Retourne tout les mots de la taille length
         public List<string> SearchByLength(int length)
         {
             List<string> words = new List<string>();
