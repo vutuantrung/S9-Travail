@@ -23,7 +23,11 @@ namespace TestsLexicogTree
             for (int i = 0; i < names.Length; i++)
             {
                 lexicogTree.AddName(names[i].ToString());
+                Assert.That(lexicogTree.Count == i + 1);
             }
+
+            Assert.Throws<Exception>(() => { lexicogTree.AddName(names[0].ToString()); }, "This name is already existed.");
+            Assert.Throws<Exception>(() => { lexicogTree.AddName(names[1].ToString()); }, "This name is already existed.");
         }
 
         [TestCase(new object[] { "abcd", "abab" }, new object[] { "ab", "asde" })]

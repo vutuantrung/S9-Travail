@@ -7,15 +7,16 @@ namespace LexicogTree
 {
     public class Tree
     {
-        int _count;
-
         public Node _root;
+
+        int _count;
 
         public int Count => _count;
 
         public Tree()
         {
             _root = null;
+            _count = 0;
         }
 
         public void AddName(string word)
@@ -23,18 +24,27 @@ namespace LexicogTree
             try
             {
                 word = word + "#";
-                AddWord(ref _root, word, 0);
+                AddWord(ref _root, word, 0, false);
             }
-            catch (Exception ex)
+            catch(Exception ex)
             {
                 throw ex;
             }
+            
         }
 
-        public void AddWord(ref Node nod, string word, int index)
+        public void AddWord(ref Node nod, string word, int index, bool isAdded)
         {
             // Si la taille du mot est atteinte c'est bon
-            if (index >= word.Length) return;
+            if (index >= word.Length)
+            {
+                if (isAdded)
+                {
+                    _count++;
+                    return;
+                }
+                else throw new Exception("This name is already existed.");
+            }
 
             // Si la node est null il faut ajouter la lettre actuelle
             if (nod == null)
@@ -46,7 +56,7 @@ namespace LexicogTree
                     SonNode = null
                 };
                 // et la suite du mot
-                AddWord(ref nod.SonNode, word, ++index);
+                AddWord(ref nod.SonNode, word, ++index, true);
             }
             // Si la node n'est pas null
             else
@@ -55,12 +65,12 @@ namespace LexicogTree
                 if (nod.Letter != word[index])
                 {
                     // On regarde si le frère contient la lettre
-                    AddWord(ref nod.BrotherNode, word, index);
+                    AddWord(ref nod.BrotherNode, word, index, isAdded);
                 }
                 else
                 {
                     // Si la lettre est identique on continue sur le fils
-                    AddWord(ref nod.SonNode, word, ++index);
+                    AddWord(ref nod.SonNode, word, ++index, isAdded);
                 }
             }
         }
@@ -73,8 +83,8 @@ namespace LexicogTree
         // Retourne tout les mots contenant le prefix suivant
         public List<string> Prefix(string pref)
         {
-            List<string> words = new List<string>();            
-            PrefixRec(ref Root, pref, words, "");
+            List<string> words = new List<string>();
+            PrefixRec(ref _root, pref, words, "");
             return words;
         }
 
@@ -128,7 +138,7 @@ namespace LexicogTree
             if (nod == null) return;
 
             // Si la length est atteinte on regarde si on trouve un end of word (on appel la fonction pour tester les frères)
-            if(currentword.Length >= length)
+            if (currentword.Length >= length)
             {
                 // Si on en trouve une on ajoute le mot actuel
                 if (SearchWord(ref nod, "#", 0))
