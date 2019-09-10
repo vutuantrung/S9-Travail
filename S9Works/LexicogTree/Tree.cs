@@ -75,8 +75,25 @@ namespace LexicogTree
             throw new NotImplementedException();
         }
 
-        public bool SearchNode()
+        public bool SearchWord()
         {
+            /* 
+             * si idx > word.length
+             *  return true
+             *  
+             * Récupérer le char c à l'index idx
+             * Aller sur currentNode
+             * 
+             * Si c == N.letter
+             *  boucle avec le fils et idx + 1
+             *  
+             * Sinon 
+             *  si frère != null
+             *      boucle sur frère avec idx
+             *  sinon
+             *      return false
+             */
+
             throw new NotImplementedException();
         }
 
