@@ -72,9 +72,36 @@ namespace LexicogTree
             throw new NotImplementedException();
         }
 
-        public string[] SearchByLength(int length)
+        public List<string> SearchByLength(int length)
         {
-            throw new NotImplementedException();
+            List<string> words = new List<string>();
+            SearchByLengthRec(ref Root, length, words, "");
+            return words;
+        }
+
+        public void SearchByLengthRec(ref Node nod, int length, List<string> words, string currentword)
+        {
+            if (nod == null) return;
+
+            if(currentword.Length >= length)
+            {
+                if (SearchWord(ref nod, "", 0))
+                {
+                    words.Add(currentword);
+                }
+            }
+            else
+            {
+                // boucle sur le frère
+                SearchByLengthRec(ref nod.BrotherNode, length, words, currentword);
+
+                // ajoute la lettre et continue sur le fils si c'est pas un end of word
+                if (nod.Letter != '#')
+                {
+                    currentword += nod.Letter;
+                    SearchByLengthRec(ref nod.SonNode, length, words, currentword);
+                }
+            }
         }
 
         public bool SearchNode(string word)
@@ -86,7 +113,7 @@ namespace LexicogTree
 
         public bool SearchWord(ref Node nod, string word, int index)
         {
-            if (index > word.Length) return true;
+            if (index >= word.Length) return true;
 
             if (nod == null) return false;
             else
