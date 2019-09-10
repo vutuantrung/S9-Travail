@@ -18,6 +18,8 @@ namespace LexicogTree
 
         public void AddName(string word)
         {
+            word = word + "#";
+
             AddWord(ref Root, word, 0);
         }
 
@@ -75,26 +77,29 @@ namespace LexicogTree
             throw new NotImplementedException();
         }
 
-        public bool SearchWord()
+        public bool SearchNode(string word)
         {
-            /* 
-             * si idx > word.length
-             *  return true
-             *  
-             * Récupérer le char c à l'index idx
-             * Aller sur currentNode
-             * 
-             * Si c == N.letter
-             *  boucle avec le fils et idx + 1
-             *  
-             * Sinon 
-             *  si frère != null
-             *      boucle sur frère avec idx
-             *  sinon
-             *      return false
-             */
+            word = word + "#";
 
-            throw new NotImplementedException();
+            return SearchWord(ref Root, word, 0);
+        }
+
+        public bool SearchWord(ref Node nod, string word, int index)
+        {
+            if (index > word.Length) return true;
+
+            if (nod == null) return false;
+            else
+            {
+                if (word[index] == nod.Letter)
+                {
+                    return SearchWord(ref nod.SonNode, word, ++index);
+                }
+                else
+                {
+                    return SearchWord(ref nod.BrotherNode, word, index);
+                }
+            }
         }
 
         public void Print()
