@@ -75,9 +75,48 @@ namespace LexicogTree
             }
         }
 
-        public void DeleteNode()
+        public void DeleteNode(string word)
         {
-            throw new NotImplementedException();
+            if(!SearchNode(word))
+                throw new Exception("This word doesn't exist.");
+
+            DeleteNodeRec(ref _root, word, 0);
+        }
+
+        public bool DeleteNodeRec(ref Node nod, string word, int index)
+        {
+            bool deleateMore = true;
+            // Si la taille du mot est atteinte c'est bon.
+            if (index >= word.Length)
+            {
+                // Si un frère existe seul le end of word est à supprimer
+                deleateMore = nod.BrotherNode != null;
+                nod = nod.BrotherNode;              
+            }
+
+            // on compare la lettre à notre mot
+            if (word[index] == nod.Letter)
+            {
+                // Si c'est bon on boucle sur le fils
+                if(DeleteNodeRec(ref nod.SonNode, word, index + 1))
+                {
+                    // On supprime si on le doit
+                    deleateMore = nod.BrotherNode != null;
+                    nod = nod.BrotherNode;
+                }
+            }
+            else
+            {
+                // Sinon on regarde sur le frère si il n'a pas la bonne lettre
+                if (DeleteNodeRec(ref nod.BrotherNode, word, index))
+                {
+                    // On supprime si on le doit
+                    deleateMore = nod.BrotherNode != null;
+                    nod = nod.BrotherNode;
+                }
+            }
+
+            return deleateMore;
         }
 
         // Retourne tout les mots contenant le prefix suivant
