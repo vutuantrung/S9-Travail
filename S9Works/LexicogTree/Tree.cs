@@ -65,17 +65,45 @@ namespace LexicogTree
         // Retourne tout les mots contenant le prefix suivant
         public List<string> Prefix(string pref)
         {
-
-            throw new NotImplementedException();
+            List<string> words = new List<string>();            
+            PrefixRec(ref Root, pref, words, "");
+            return words;
         }
 
-        public List<string> PrefixRec()
+        public void PrefixRec(ref Node nod, string pref, List<string> words, string currentword)
         {
-            /*
-             * 
-             * 
-             */
-            throw new NotImplementedException();
+            if (nod == null) return;
+
+            // Si le prefix a été trouvé
+            if (currentword.Length >= pref.Length)
+            {
+                // On regarde si un end of word est présent
+                if (SearchWord(ref nod, "#", 0))
+                {
+                    words.Add(currentword);
+                }
+                // On continu sur le frère
+                PrefixRec(ref nod.BrotherNode, pref, words, currentword);
+
+                // Et sur le fils après avoir ajouté la lettre actuelle
+                currentword += nod.Letter;
+                PrefixRec(ref nod.SonNode, pref, words, currentword);
+            }
+            else
+            {
+                // on compare la lettre à notre mot
+                if (pref[currentword.Length] == nod.Letter)
+                {
+                    // Si c'est bon on boucle sur le fils
+                    currentword += nod.Letter;
+                    PrefixRec(ref nod.SonNode, pref, words, currentword);
+                }
+                else
+                {
+                    // Sinon on regarde sur le frère si il n'a pas la bonne lettre
+                    PrefixRec(ref nod.BrotherNode, pref, words, currentword);
+                }
+            }
         }
 
         // Retourne tout les mots de la taille length
@@ -91,11 +119,11 @@ namespace LexicogTree
             // Si la node est vide (notamment après un appel du frère)
             if (nod == null) return;
 
-            // Si la length est atteinte on regarde si on trouve un end of word
+            // Si la length est atteinte on regarde si on trouve un end of word (on appel la fonction pour tester les frères)
             if(currentword.Length >= length)
             {
                 // Si on en trouve une on ajoute le mot actuel
-                if (SearchWord(ref nod, "", 0))
+                if (SearchWord(ref nod, "#", 0))
                 {
                     words.Add(currentword);
                 }
