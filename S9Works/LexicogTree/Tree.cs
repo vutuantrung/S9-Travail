@@ -7,20 +7,28 @@ namespace LexicogTree
 {
     public class Tree
     {
-        public Node Root;
+        int _count;
 
-        public Node Iterator { get; set; }
+        public Node _root;
+
+        public int Count => _count;
 
         public Tree()
         {
-            Root = null;
+            _root = null;
         }
 
         public void AddName(string word)
         {
-            word = word + "#";
-
-            AddWord(ref Root, word, 0);
+            try
+            {
+                word = word + "#";
+                AddWord(ref _root, word, 0);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
 
         public void AddWord(ref Node nod, string word, int index)
@@ -110,7 +118,7 @@ namespace LexicogTree
         public List<string> SearchByLength(int length)
         {
             List<string> words = new List<string>();
-            SearchByLengthRec(ref Root, length, words, "");
+            SearchByLengthRec(ref _root, length, words, "");
             return words;
         }
 
@@ -145,8 +153,7 @@ namespace LexicogTree
         public bool SearchNode(string word)
         {
             word = word + "#";
-
-            return SearchWord(ref Root, word, 0);
+            return SearchWord(ref _root, word, 0);
         }
 
         public bool SearchWord(ref Node nod, string word, int index)
@@ -174,7 +181,7 @@ namespace LexicogTree
 
         public void Print()
         {
-            Node broIter = Root;
+            Node broIter = _root;
             while (broIter != null)
             {
                 Node sonIter = broIter;
