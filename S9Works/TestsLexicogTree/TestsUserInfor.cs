@@ -9,19 +9,33 @@ namespace TestsLexicogTree
     [TestFixture]
     class T1UserTests
     {
-        [TestCase("abcd")]
-        public void can_add_name(string name)
+        [TestCase(new object[] { "abcd", "abab" })]
+        [TestCase(new object[] { "abdfg", "hdgbjf" })]
+        [TestCase(new object[] { "dsfsn", "dfgthjjgf" })]
+        public void can_add_name(object[] names)
         {
             Tree lexicogTree = new Tree();
-            lexicogTree.AddName("abcd");
-            lexicogTree.AddName("abab");
-            lexicogTree.Print();
+            for(int i = 0; i < names.Length; i++)
+            {
+                lexicogTree.AddName(names[i].ToString());
+            }
         }
 
-        [Test]
-        public void unit_test_example2()
+        [TestCase(new object[] { "abcd", "abab" })]
+        [TestCase(new object[] { "abdfg", "hdgbjf" })]
+        [TestCase(new object[] { "dsfsn", "dfgthjjgf" })]
+        public void can_search_name(object[] names)
         {
+            Tree lexicogTree = new Tree();
+            for (int i = 0; i < names.Length; i++)
+            {
+                lexicogTree.AddName(names[i].ToString());
+            }
 
+            for (int i = 0; i < names.Length; i++)
+            {
+                lexicogTree.SearchNode(names[i].ToString());
+            }
         }
     }
 }
