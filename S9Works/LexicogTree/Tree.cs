@@ -25,7 +25,10 @@ namespace LexicogTree
 
         public void AddWord(ref Node nod, string word, int index)
         {
+            // Si la taille du mot est atteinte c'est bon
             if (index >= word.Length) return;
+
+            // Si la node est null il faut ajouter la lettre actuelle
             if (nod == null)
             {
                 nod = new Node
@@ -34,29 +37,21 @@ namespace LexicogTree
                     BrotherNode = null,
                     SonNode = null
                 };
-                AddWord(ref nod.SonNode, word, index + 1);
+                // et la suite du mot
+                AddWord(ref nod.SonNode, word, ++index);
             }
+            // Si la node n'est pas null
             else
             {
+                // Si la lettre est différente
                 if (nod.Letter != word[index])
                 {
-                    if (nod.BrotherNode != null)
-                    {
-                        AddWord(ref nod.BrotherNode, word, index);
-                    }
-                    else
-                    {
-                        nod.BrotherNode = new Node
-                        {
-                            Letter = word[index],
-                            BrotherNode = null,
-                            SonNode = null
-                        };
-                        AddWord(ref nod.BrotherNode.SonNode, word, ++index);
-                    }
+                    // On regarde si le frère contient la lettre
+                    AddWord(ref nod.BrotherNode, word, index);
                 }
                 else
                 {
+                    // Si la lettre est identique on continue sur le fils
                     AddWord(ref nod.SonNode, word, ++index);
                 }
             }
@@ -68,9 +63,18 @@ namespace LexicogTree
         }
 
         // Retourne tout les mots contenant le prefix suivant
-        public List<string> Prefix()
+        public List<string> Prefix(string pref)
         {
 
+            throw new NotImplementedException();
+        }
+
+        public List<string> PrefixRec()
+        {
+            /*
+             * 
+             * 
+             */
             throw new NotImplementedException();
         }
 
@@ -119,17 +123,22 @@ namespace LexicogTree
 
         public bool SearchWord(ref Node nod, string word, int index)
         {
+            // Si la taille du mot est atteinte c'est bon.
             if (index >= word.Length) return true;
 
+            // si il y a une node
             if (nod == null) return false;
             else
             {
+                // on compare la lettre à notre mot
                 if (word[index] == nod.Letter)
                 {
+                    // Si c'est bon on boucle sur le fils
                     return SearchWord(ref nod.SonNode, word, ++index);
                 }
                 else
                 {
+                    // Sinon on regarde sur le frère si il n'a pas la bonne lettre
                     return SearchWord(ref nod.BrotherNode, word, index);
                 }
             }
