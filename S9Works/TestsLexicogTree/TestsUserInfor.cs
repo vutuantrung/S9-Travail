@@ -7,7 +7,7 @@ using System.Linq;
 namespace TestsLexicogTree
 {
     [TestFixture]
-    class T1UserTests
+    class LexicogTest
     {
         [TestCase(new object[] { "abcd", "abhi" })]
         [TestCase(new object[] { "abcd", "ab" })]
@@ -59,6 +59,8 @@ namespace TestsLexicogTree
 
 
         [TestCase(new object[] { "dfg", "ab", "sfdn", "df", "ds" }, new object[] { }, 6)]
+        [TestCase(new object[] { "dsag", "bsdf", "gnsdg", "fgdg", "dfg" }, new object[] { "dfg" }, 3)]
+        [TestCase(new object[] { "asd", "df", "d", "asdgasdg", "" }, new object[] { "" }, 0)]
         [TestCase(new object[] { "a", "s", "g", "as", "j" }, new object[] { "a", "s", "g", "j" }, 1)]
         public void can_search_all_name_with_length_specific(object[] namesAdded, object[] namesSearched, int len)
         {
@@ -73,12 +75,7 @@ namespace TestsLexicogTree
                        .Select(x => x.ToString())
                        .ToArray();
 
-            var q = from a in nameS
-                    join b in res on a equals b
-                    select a;
-
-            bool equals = namesSearched.Length == res.Length && q.Count() == namesSearched.Length;
-            Assert.That(equals == true);
+            Assert.That(IsEqual(res, nameS) == true);
         }
 
 
@@ -86,6 +83,7 @@ namespace TestsLexicogTree
         [TestCase(new object[] { "jbdf", "sfgnst", "gb", "gha", "fdhd" }, new object[] { }, "e")]
         [TestCase(new object[] { "vdf", "shsrg", "sdhdf", "sdgh", "s" }, new object[] { }, "df")]
         [TestCase(new object[] { "fg", "hf", "s", "fgs", "haa" }, new object[] { "fg", "fgs" }, "fg")]
+        [TestCase(new object[] { "fg", "hf", "s", "fgs", "haa" }, new object[] { "fg", "hf", "s", "fgs", "haa" }, "")]
         public void can_get_all_prefix_name(object[] namesAdded, object[] namesPref, string pref)
         {
             Tree lexicogTree = new Tree();
@@ -99,12 +97,43 @@ namespace TestsLexicogTree
                        .Select(x => x.ToString())
                        .ToArray();
 
-            var q = from a in nameS
-                    join b in res on a equals b
+            Assert.That(IsEqual(res, nameS) == true);
+
+            lexicogTree.Print(ref lexicogTree._root);
+        }
+
+
+        [TestCase(new object[] { "asdgd", "asdhd", "ashfdn", "sggrf", "asdfgd" }, new object[] { "asdgd", "ashfdn", "sggrf" }, new object[] { "asdhd", "asdfgd" })]
+        [TestCase(new object[] { "dfghdf", "jm", "dgf", "dhd", "df" }, new object[] { "dfghdf", "dhd" }, new object[] { "jm", "dgf", "df" })]
+        [TestCase(new object[] { "", "sdb", "dhdfg", "hfgh", "gh" }, new object[] { "", "dhdfg", "gh" }, new object[] { "sdb", "hfgh" })]
+        [TestCase(new object[] { "", "asdhddfg", "d", "hfgh", "nfhn" }, new object[] { "d", "hfgh", "nfhn" }, new object[] { "", "asdhddfg" })]
+        [TestCase(new object[] { "ghgh", "asbddhd", "sfg" }, new object[] { "sfg" }, new object[] { "ghgh", "asbddhd", "sfg" })]
+        public void can_delete_name(object[] namesAdded, object[] namesDeleted, object[] namesLeft)
+        {
+            Tree lexicogTree = new Tree();
+            for (int i = 0; i < namesAdded.Length; i++)
+            {
+                lexicogTree.AddName(namesAdded[i].ToString());
+            }
+
+            for (int i = 0; i < namesDeleted.Length; i++)
+            {
+                lexicogTree.DeleteNode(namesDeleted[i].ToString());
+            }
+
+            string[] allArr = lexicogTree.GetAll().ToArray();
+
+            CollectionAssert.AreEqual(allArr, namesLeft);
+        }
+
+
+        bool IsEqual(string[] arr1, string[] arr2)
+        {
+            var q = from a in arr2
+                    join b in arr1 on a equals b
                     select a;
 
-            bool equals = namesPref.Length == res.Length && q.Count() == namesPref.Length;
-            Assert.That(equals == true);
+            return arr2.Length == arr1.Length && q.Count() == arr2.Length;
         }
     }
 }

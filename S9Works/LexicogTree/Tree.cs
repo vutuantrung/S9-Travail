@@ -26,11 +26,11 @@ namespace LexicogTree
                 word = word + "#";
                 AddWord(ref _root, word, 0, false);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 throw ex;
             }
-            
+
         }
 
         public void AddWord(ref Node nod, string word, int index, bool isAdded)
@@ -77,10 +77,15 @@ namespace LexicogTree
 
         public void DeleteNode(string word)
         {
-            if(!SearchNode(word))
-                throw new Exception("This word doesn't exist.");
-
-            DeleteNodeRec(ref _root, word, 0);
+            try
+            {
+                if (!SearchNode(word)) throw new Exception("This word doesn't exist.");
+                DeleteNodeRec(ref _root, word, 0);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
 
         public bool DeleteNodeRec(ref Node nod, string word, int index)
@@ -91,14 +96,14 @@ namespace LexicogTree
             {
                 // Si un frère existe seul le end of word est à supprimer
                 deleateMore = nod.BrotherNode != null;
-                nod = nod.BrotherNode;              
+                nod = nod.BrotherNode;
             }
 
             // on compare la lettre à notre mot
             if (word[index] == nod.Letter)
             {
                 // Si c'est bon on boucle sur le fils
-                if(DeleteNodeRec(ref nod.SonNode, word, index + 1))
+                if (DeleteNodeRec(ref nod.SonNode, word, index + 1))
                 {
                     // On supprime si on le doit
                     deleateMore = nod.BrotherNode != null;
@@ -228,19 +233,20 @@ namespace LexicogTree
             }
         }
 
-        public void Print()
+        public List<string> GetAll() => this.Prefix("");
+
+        public void Print(ref Node n)
         {
-            Node broIter = _root;
-            while (broIter != null)
+            if (n == null)
             {
-                Node sonIter = broIter;
-                while (sonIter != null)
-                {
-                    Debug.Write(sonIter.Letter);
-                    sonIter = sonIter.SonNode;
-                }
-                broIter = broIter.BrotherNode;
+                return;
+            }
+            else
+            {
+                Print(ref n.BrotherNode);
+                Print(ref n.SonNode);
                 Debug.WriteLine("");
+                Debug.Write(n.Letter);
             }
         }
     }
