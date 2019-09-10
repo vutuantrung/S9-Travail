@@ -30,6 +30,7 @@ namespace TestsLexicogTree
             Assert.Throws<Exception>(() => { lexicogTree.AddName(names[1].ToString()); }, "This name is already existed.");
         }
 
+
         [TestCase(new object[] { "abcd", "abab" }, new object[] { "ab", "asde" })]
         [TestCase(new object[] { "abs", "ab" }, new object[] { "ahdf", "abd" })]
         [TestCase(new object[] { "dfg", "df" }, new object[] { "ahdf", "abd" })]
@@ -56,6 +57,7 @@ namespace TestsLexicogTree
             }
         }
 
+
         [TestCase(new object[] { "dfg", "ab", "sfdn", "df", "ds" }, new object[] { }, 6)]
         [TestCase(new object[] { "a", "s", "g", "as", "j" }, new object[] { "a", "s", "g", "j" }, 1)]
         public void can_search_all_name_with_length_specific(object[] namesAdded, object[] namesSearched, int len)
@@ -76,6 +78,32 @@ namespace TestsLexicogTree
                     select a;
 
             bool equals = namesSearched.Length == res.Length && q.Count() == namesSearched.Length;
+            Assert.That(equals == true);
+        }
+
+
+        [TestCase(new object[] { "asdgd", "asdhd", "ashfdn", "sggrf", "asdfgd" }, new object[] { "asdgd", "asdhd", "ashfdn", "asdfgd" }, "as")]
+        [TestCase(new object[] { "jbdf", "sfgnst", "gb", "gha", "fdhd" }, new object[] { }, "e")]
+        [TestCase(new object[] { "vdf", "shsrg", "sdhdf", "sdgh", "s" }, new object[] { }, "df")]
+        [TestCase(new object[] { "fg", "hf", "s", "fgs", "haa" }, new object[] { "fg", "fgs" }, "fg")]
+        public void can_get_all_prefix_name(object[] namesAdded, object[] namesPref, string pref)
+        {
+            Tree lexicogTree = new Tree();
+            for (int i = 0; i < namesAdded.Length; i++)
+            {
+                lexicogTree.AddName(namesAdded[i].ToString());
+            }
+
+            string[] res = lexicogTree.Prefix(pref).ToArray();
+            string[] nameS = namesPref.Where(x => x != null)
+                       .Select(x => x.ToString())
+                       .ToArray();
+
+            var q = from a in nameS
+                    join b in res on a equals b
+                    select a;
+
+            bool equals = namesPref.Length == res.Length && q.Count() == namesPref.Length;
             Assert.That(equals == true);
         }
     }
