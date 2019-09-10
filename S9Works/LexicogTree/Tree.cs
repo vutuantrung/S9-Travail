@@ -247,18 +247,31 @@ namespace LexicogTree
 
         public List<string> GetAll() => this.Prefix("");
 
-        public void Print(ref Node n)
+        public void Print(ref Node n, int nbPassed, bool isUnderline)
         {
+            int nbSpaces = nbPassed;
             if (n == null)
             {
                 return;
             }
             else
             {
-                Print(ref n.BrotherNode);
-                Print(ref n.SonNode);
-                Debug.WriteLine("");
-                Debug.Write(n.Letter);
+                string spaces = string.Empty;
+                if (isUnderline)
+                {
+                    for (int i = 0; i < nbSpaces; i++)
+                    {
+                        spaces += "  ";
+                    }
+                }
+                
+                Debug.Write(spaces + n.Letter + " ");
+                Print(ref n.SonNode, ++nbPassed, false);
+                if (n.Letter == '#')
+                {
+                    Debug.WriteLine("");
+                }
+                Print(ref n.BrotherNode, nbSpaces, true);
             }
         }
     }

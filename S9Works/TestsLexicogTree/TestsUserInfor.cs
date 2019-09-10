@@ -2,6 +2,7 @@
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 
 namespace TestsLexicogTree
@@ -79,7 +80,7 @@ namespace TestsLexicogTree
         }
 
 
-        [TestCase(new object[] { "asdgd", "asdhd", "ashfdn", "sggrf", "asdfgd" }, new object[] { "asdgd", "asdhd", "ashfdn", "asdfgd" }, "as")]
+        [TestCase(new object[] { "asdgd", "asdhd", "ashfdn", "sggrf", "adfgd", "asdfgd" }, new object[] { "asdgd", "asdhd", "ashfdn", "asdfgd" }, "as")]
         [TestCase(new object[] { "jbdf", "sfgnst", "gb", "gha", "fdhd" }, new object[] { }, "e")]
         [TestCase(new object[] { "vdf", "shsrg", "sdhdf", "sdgh", "s" }, new object[] { }, "df")]
         [TestCase(new object[] { "fg", "hf", "s", "fgs", "haa" }, new object[] { "fg", "fgs" }, "fg")]
@@ -99,7 +100,8 @@ namespace TestsLexicogTree
 
             Assert.That(IsEqual(res, nameS) == true);
 
-            lexicogTree.Print(ref lexicogTree._root);
+            lexicogTree.Print(ref lexicogTree._root, 0, false);
+            Debug.WriteLine("------");
         }
 
         
