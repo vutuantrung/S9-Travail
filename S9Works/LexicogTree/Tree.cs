@@ -90,25 +90,24 @@ namespace LexicogTree
 
         public bool DeleteNodeRec(ref Node nod, string word, int index)
         {
-            bool deleateMore = true;
+            bool deleteMore = true;
 
             if (word[index] == nod.Letter)
             {
                 if (index >= word.Length - 1)
                 {
-                    deleateMore = nod.BrotherNode == null;
+                    deleteMore = nod.BrotherNode == null;
                     nod = nod.BrotherNode;
                 }
-                        
                 // Si c'est bon on boucle sur le fils
                 else if (DeleteNodeRec(ref nod.SonNode, word, index + 1))
                 {
                     // On supprime si on le doit
-                    deleateMore = nod.BrotherNode == null;
+                    deleteMore = nod.BrotherNode == null;
                     nod = nod.BrotherNode;
                 }
                 else
-                    deleateMore = false;
+                    deleteMore = false;
             }
             else
             {
@@ -118,20 +117,20 @@ namespace LexicogTree
                     // On supprime si on le doit
                     if (nod.SonNode != null && nod.BrotherNode == null)
                     {
-                        deleateMore = false;
+                        deleteMore = false;
                     }
                     else
                     {
-                        deleateMore = nod.BrotherNode == null;
+                        deleteMore = nod.BrotherNode == null;
                         nod = nod.BrotherNode;
                     }
                 }
                 else
-                    deleateMore = false;
+                    deleteMore = false;
             }
             //}
 
-            return deleateMore;
+            return deleteMore;
         }
 
         public List<string> GetAllWords()

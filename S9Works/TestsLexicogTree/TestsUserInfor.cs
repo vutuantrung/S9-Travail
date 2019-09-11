@@ -104,12 +104,12 @@ namespace TestsLexicogTree
             Debug.WriteLine("------");
         }
 
-        
-        //[TestCase(new object[] { "asdgd", "asdhd", "ashfdn", "sggrf", "asdfgd" }, new object[] { "asdgd", "ashfdn", "sggrf" }, new object[] { "asdhd", "asdfgd" })]
-        //[TestCase(new object[] { "dfghdf", "jm", "dgf", "dhd", "df" }, new object[] { "dfghdf", "dhd" }, new object[] { "jm", "dgf", "df" })]
-        //[TestCase(new object[] { "", "sdb", "dhdfg", "hfgh", "gh" }, new object[] { "", "dhdfg", "gh" }, new object[] { "sdb", "hfgh" })]
+
+        [TestCase(new object[] { "asdgd", "asdhd", "ashfdn", "sggrf" }, new object[] { "asdhd" }, new object[] { "asdgd", "ashfdn", "sggrf" })]
+        [TestCase(new object[] { "dfghdf", "jm", "dgf", "dhd", "df" }, new object[] { "dfghdf", "dhd" }, new object[] { "jm", "dgf", "df" })]
+        [TestCase(new object[] { "", "sdb", "dhdfg", "hfgh", "gh" }, new object[] { "", "dhdfg", "gh" }, new object[] { "sdb", "hfgh" })]
         [TestCase(new object[] { "", "asdhddfg", "d", "hfgh", "nfhn" }, new object[] { "d" }, new object[] { "", "asdhddfg", "hfgh", "nfhn" })]
-        //[TestCase(new object[] { "ghgh", "asbddhd", "sfg" }, new object[] { "sfg" }, new object[] { "ghgh", "asbddhd", "sfg" })]
+        [TestCase(new object[] { "ghgh", "asbddhd", "sfg" }, new object[] { "sfg" }, new object[] { "ghgh", "asbddhd" })]
         public void can_delete_name(object[] namesAdded, object[] namesDeleted, object[] namesLeft)
         {
             Tree lexicogTree = new Tree();
@@ -124,8 +124,30 @@ namespace TestsLexicogTree
             }
 
             string[] allArr = lexicogTree.GetAll().ToArray();
+            string[] nameL = namesLeft.Where(x => x != null)
+                       .Select(x => x.ToString())
+                       .ToArray();
 
-            CollectionAssert.AreEqual(allArr, namesLeft);
+            Assert.That(IsEqual(allArr, nameL));
+        }
+
+        [TestCase(new object[] { "asdgd", "asdhd", "ashfdn", "sggrf" })]
+        [TestCase(new object[] { "sdfgs", "sasdhd", "", "asd" })]
+        [TestCase(new object[] { "sdvs", "lfdkmahjdf", "sdbf", "sggrf", "sdfgc" })]
+        public void can_get_all_names(object[] namesAdded)
+        {
+            Tree lexicogTree = new Tree();
+            for (int i = 0; i < namesAdded.Length; i++)
+            {
+                lexicogTree.AddName(namesAdded[i].ToString());
+            }
+
+            string[] allArr = lexicogTree.GetAllWords().ToArray();
+            string[] nameL = namesAdded.Where(x => x != null)
+                       .Select(x => x.ToString())
+                       .ToArray();
+
+            Assert.That(IsEqual(allArr, nameL));
         }
 
 
