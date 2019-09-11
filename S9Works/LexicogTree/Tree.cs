@@ -19,6 +19,10 @@ namespace LexicogTree
             _count = 0;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="word"></param>
         public void AddName(string word)
         {
             try
@@ -33,6 +37,13 @@ namespace LexicogTree
 
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="nod"></param>
+        /// <param name="word"></param>
+        /// <param name="index"></param>
+        /// <param name="isAdded"></param>
         public void AddWord(ref Node nod, string word, int index, bool isAdded)
         {
             // Si la taille du mot est atteinte c'est bon
@@ -75,12 +86,17 @@ namespace LexicogTree
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="word"></param>
         public void DeleteNode(string word)
         {
             try
             {
                 if (!SearchNode(word)) throw new Exception("This word doesn't exist.");
                 DeleteNodeRec(ref _root, word + "#", 0);
+                _count--;
             }
             catch (Exception ex)
             {
@@ -88,6 +104,13 @@ namespace LexicogTree
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="nod"></param>
+        /// <param name="word"></param>
+        /// <param name="index"></param>
+        /// <returns></returns>
         public bool DeleteNodeRec(ref Node nod, string word, int index)
         {
             bool deleteMore = true;
@@ -128,11 +151,14 @@ namespace LexicogTree
                 else
                     deleteMore = false;
             }
-            //}
 
             return deleteMore;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         public List<string> GetAllWords()
         {
             List<string> words = new List<string>();
@@ -219,6 +245,13 @@ namespace LexicogTree
             return words;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="nod"></param>
+        /// <param name="length"></param>
+        /// <param name="words"></param>
+        /// <param name="currentword"></param>
         public void SearchByLengthRec(ref Node nod, int length, List<string> words, string currentword)
         {
             // Si la node est vide (notamment après un appel du frère)
@@ -247,12 +280,24 @@ namespace LexicogTree
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="word"></param>
+        /// <returns></returns>
         public bool SearchNode(string word)
         {
             word = word + "#";
             return SearchWord(ref _root, word, 0);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="nod"></param>
+        /// <param name="word"></param>
+        /// <param name="index"></param>
+        /// <returns></returns>
         public bool SearchWord(ref Node nod, string word, int index)
         {
             // Si la taille du mot est atteinte c'est bon.
