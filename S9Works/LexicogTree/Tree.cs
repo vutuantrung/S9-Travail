@@ -91,19 +91,10 @@ namespace LexicogTree
         public bool DeleteNodeRec(ref Node nod, string word, int index)
         {
             bool deleateMore = true;
-            // Si la taille du mot est atteinte c'est bon.
-            //if (index >= word.Length)
-            //{
-            //    // Si un frère existe seul le end of word est à supprimer
-            //    deleateMore = nod.BrotherNode != null;
-            //    nod = nod.BrotherNode;
-            //}
-            //else
-            //{
-                // on compare la lettre à notre mot
+
             if (word[index] == nod.Letter)
             {
-                if (index >= word.Length - 1)   // 0  2         1  2
+                if (index >= word.Length - 1)
                 {
                     deleateMore = nod.BrotherNode == null;
                     nod = nod.BrotherNode;
@@ -125,8 +116,15 @@ namespace LexicogTree
                 if (DeleteNodeRec(ref nod.BrotherNode, word, index))
                 {
                     // On supprime si on le doit
-                    deleateMore = nod.BrotherNode == null;
-                    nod = nod.BrotherNode;
+                    if (nod.SonNode != null && nod.BrotherNode == null)
+                    {
+                        deleateMore = false;
+                    }
+                    else
+                    {
+                        deleateMore = nod.BrotherNode == null;
+                        nod = nod.BrotherNode;
+                    }
                 }
                 else
                     deleateMore = false;
@@ -134,6 +132,27 @@ namespace LexicogTree
             //}
 
             return deleateMore;
+        }
+
+        public List<string> GetAllWords()
+        {
+            List<string> words = new List<string>();
+            GetAllWordsRec(ref _root, words, "");
+            return words;
+        }
+
+        // Affiche tout les mots contenu dans le dictionnaire
+        public void GetAllWordsRec(ref Node nod, List<string> words, string currentword)
+        {
+            // Dès qu'on trouve un end of word on ajoute le mot et on parcours son frère et fils.
+            if (nod == null) return;
+
+            if (nod.Letter == '#')
+                words.Add(currentword);
+
+            GetAllWordsRec(ref nod.BrotherNode, words, currentword);
+            currentword += nod.Letter;
+            GetAllWordsRec(ref nod.SonNode, words, currentword);
         }
 
         // Retourne tout les mots contenant le prefix suivant
