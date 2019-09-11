@@ -123,7 +123,7 @@ namespace TestsLexicogTree
                 lexicogTree.DeleteNode(namesDeleted[i].ToString());
             }
 
-            string[] allArr = lexicogTree.GetAll().ToArray();
+            string[] allArr = lexicogTree.GetAllWords().ToArray();
             string[] nameL = namesLeft.Where(x => x != null)
                        .Select(x => x.ToString())
                        .ToArray();

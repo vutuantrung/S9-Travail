@@ -140,7 +140,12 @@ namespace LexicogTree
             return words;
         }
 
-        // Affiche tout les mots contenu dans le dictionnaire
+        /// <summary>
+        /// Affiche tout les mots contenu dans le dictionnaire
+        /// </summary>
+        /// <param name="nod"></param>
+        /// <param name="words"></param>
+        /// <param name="currentword"></param>
         public void GetAllWordsRec(ref Node nod, List<string> words, string currentword)
         {
             // Dès qu'on trouve un end of word on ajoute le mot et on parcours son frère et fils.
@@ -154,7 +159,11 @@ namespace LexicogTree
             GetAllWordsRec(ref nod.SonNode, words, currentword);
         }
 
-        // Retourne tout les mots contenant le prefix suivant
+        /// <summary>
+        /// Retourne tout les mots contenant le prefix suivant
+        /// </summary>
+        /// <param name="pref"></param>
+        /// <returns></returns>
         public List<string> Prefix(string pref)
         {
             List<string> words = new List<string>();
@@ -198,7 +207,11 @@ namespace LexicogTree
             }
         }
 
-        // Retourne tout les mots de la taille length
+        /// <summary>
+        /// Retourne tout les mots de la taille length
+        /// </summary>
+        /// <param name="length"></param>
+        /// <returns></returns>
         public List<string> SearchByLength(int length)
         {
             List<string> words = new List<string>();
