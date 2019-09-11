@@ -131,6 +131,7 @@ namespace TestsLexicogTree
             Assert.That(IsEqual(allArr, nameL));
         }
 
+
         [TestCase(new object[] { "asdgd", "asdhd", "ashfdn", "sggrf" })]
         [TestCase(new object[] { "sdfgs", "sasdhd", "", "asd" })]
         [TestCase(new object[] { "sdvs", "lfdkmahjdf", "sdbf", "sggrf", "sdfgc" })]

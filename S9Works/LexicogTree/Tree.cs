@@ -263,8 +263,6 @@ namespace LexicogTree
             }
         }
 
-        public List<string> GetAll() => this.Prefix("");
-
         public void Print(ref Node n, int nbPassed, bool isUnderline)
         {
             int nbSpaces = nbPassed;
