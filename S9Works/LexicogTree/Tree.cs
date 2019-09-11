@@ -20,31 +20,30 @@ namespace LexicogTree
         }
 
         /// <summary>
-        /// 
+        /// Adds a word to the tree
         /// </summary>
-        /// <param name="word"></param>
-        public void AddName(string word)
+        /// <param name="name"></param>
+        public void AddName(string name)
         {
             try
             {
-                word = word + "#";
-                AddWord(ref _root, word, 0, false);
+                name = name + "#";
+                AddWordRec(ref _root, name, 0, false);
             }
             catch (Exception ex)
             {
                 throw ex;
             }
-
         }
 
         /// <summary>
-        /// 
+        /// Adds a word in the tree using recursive way
         /// </summary>
         /// <param name="nod"></param>
         /// <param name="word"></param>
         /// <param name="index"></param>
         /// <param name="isAdded"></param>
-        public void AddWord(ref Node nod, string word, int index, bool isAdded)
+        public void AddWordRec(ref Node nod, string word, int index, bool isAdded)
         {
             // Si la taille du mot est atteinte c'est bon
             if (index >= word.Length)
@@ -67,7 +66,7 @@ namespace LexicogTree
                     SonNode = null
                 };
                 // et la suite du mot
-                AddWord(ref nod.SonNode, word, ++index, true);
+                AddWordRec(ref nod.SonNode, word, ++index, true);
             }
             // Si la node n'est pas null
             else
@@ -76,26 +75,26 @@ namespace LexicogTree
                 if (nod.Letter != word[index])
                 {
                     // On regarde si le frère contient la lettre
-                    AddWord(ref nod.BrotherNode, word, index, isAdded);
+                    AddWordRec(ref nod.BrotherNode, word, index, isAdded);
                 }
                 else
                 {
                     // Si la lettre est identique on continue sur le fils
-                    AddWord(ref nod.SonNode, word, ++index, isAdded);
+                    AddWordRec(ref nod.SonNode, word, ++index, isAdded);
                 }
             }
         }
 
         /// <summary>
-        /// 
+        /// Deletes a word from the tree
         /// </summary>
-        /// <param name="word"></param>
-        public void DeleteNode(string word)
+        /// <param name="name"></param>
+        public void DeleteName(string name)
         {
             try
             {
-                if (!SearchNode(word)) throw new Exception("This word doesn't exist.");
-                DeleteNodeRec(ref _root, word + "#", 0);
+                if (!SearchName(name)) throw new Exception("This word doesn't exist.");
+                DeleteWordRec(ref _root, name + "#", 0);
                 _count--;
             }
             catch (Exception ex)
@@ -105,13 +104,13 @@ namespace LexicogTree
         }
 
         /// <summary>
-        /// 
+        /// Deletes a word from the tree using recursive way
         /// </summary>
         /// <param name="nod"></param>
         /// <param name="word"></param>
         /// <param name="index"></param>
         /// <returns></returns>
-        public bool DeleteNodeRec(ref Node nod, string word, int index)
+        public bool DeleteWordRec(ref Node nod, string word, int index)
         {
             bool deleteMore = true;
 
@@ -123,19 +122,18 @@ namespace LexicogTree
                     nod = nod.BrotherNode;
                 }
                 // Si c'est bon on boucle sur le fils
-                else if (DeleteNodeRec(ref nod.SonNode, word, index + 1))
+                else if (DeleteWordRec(ref nod.SonNode, word, index + 1))
                 {
                     // On supprime si on le doit
                     deleteMore = nod.BrotherNode == null;
                     nod = nod.BrotherNode;
                 }
-                else
-                    deleteMore = false;
+                else deleteMore = false;
             }
             else
             {
                 // Sinon on regarde sur le frère si il n'a pas la bonne lettre
-                if (DeleteNodeRec(ref nod.BrotherNode, word, index))
+                if (DeleteWordRec(ref nod.BrotherNode, word, index))
                 {
                     // On supprime si on le doit
                     if (nod.SonNode != null && nod.BrotherNode == null)
@@ -148,26 +146,24 @@ namespace LexicogTree
                         nod = nod.BrotherNode;
                     }
                 }
-                else
-                    deleteMore = false;
+                else deleteMore = false;
             }
-
             return deleteMore;
         }
 
         /// <summary>
-        /// 
+        /// Gets all words from the tree
         /// </summary>
         /// <returns></returns>
-        public List<string> GetAllWords()
+        public List<string> GetAllNames()
         {
             List<string> words = new List<string>();
-            GetAllWordsRec(ref _root, words, "");
+            GetAllWordsRec(ref _root, words, string.Empty);
             return words;
         }
 
         /// <summary>
-        /// Affiche tout les mots contenu dans le dictionnaire
+        /// Display all words in the tree using recursive way
         /// </summary>
         /// <param name="nod"></param>
         /// <param name="words"></param>
@@ -186,17 +182,24 @@ namespace LexicogTree
         }
 
         /// <summary>
-        /// Retourne tout les mots contenant le prefix suivant
+        /// Gets all words have a prefix word in the tree
         /// </summary>
         /// <param name="pref"></param>
         /// <returns></returns>
         public List<string> Prefix(string pref)
         {
             List<string> words = new List<string>();
-            PrefixRec(ref _root, pref, words, "");
+            PrefixRec(ref _root, pref, words, string.Empty);
             return words;
         }
 
+        /// <summary>
+        /// Gets all words have a prefix word in the tree using recursive way
+        /// </summary>
+        /// <param name="nod"></param>
+        /// <param name="pref"></param>
+        /// <param name="words"></param>
+        /// <param name="currentword"></param>
         public void PrefixRec(ref Node nod, string pref, List<string> words, string currentword)
         {
             if (nod == null) return;
@@ -205,7 +208,7 @@ namespace LexicogTree
             if (currentword.Length >= pref.Length)
             {
                 // On regarde si un end of word est présent
-                if (SearchWord(ref nod, "#", 0))
+                if (SearchWordRec(ref nod, "#", 0))
                 {
                     words.Add(currentword);
                 }
@@ -234,19 +237,19 @@ namespace LexicogTree
         }
 
         /// <summary>
-        /// Retourne tout les mots de la taille length
+        /// Gets all words which have a specific length
         /// </summary>
         /// <param name="length"></param>
         /// <returns></returns>
         public List<string> SearchByLength(int length)
         {
             List<string> words = new List<string>();
-            SearchByLengthRec(ref _root, length, words, "");
+            SearchByLengthRec(ref _root, length, words, string.Empty);
             return words;
         }
 
         /// <summary>
-        /// 
+        /// Gets all words which have a specific length using recursive way
         /// </summary>
         /// <param name="nod"></param>
         /// <param name="length"></param>
@@ -261,7 +264,7 @@ namespace LexicogTree
             if (currentword.Length >= length)
             {
                 // Si on en trouve une on ajoute le mot actuel
-                if (SearchWord(ref nod, "#", 0))
+                if (SearchWordRec(ref nod, "#", 0))
                 {
                     words.Add(currentword);
                 }
@@ -281,24 +284,24 @@ namespace LexicogTree
         }
 
         /// <summary>
-        /// 
+        /// Search a word in the tree
         /// </summary>
-        /// <param name="word"></param>
+        /// <param name="name"></param>
         /// <returns></returns>
-        public bool SearchNode(string word)
+        public bool SearchName(string name)
         {
-            word = word + "#";
-            return SearchWord(ref _root, word, 0);
+            name = name + "#";
+            return SearchWordRec(ref _root, name, 0);
         }
 
         /// <summary>
-        /// 
+        /// Search a word in the tree using recursive way
         /// </summary>
         /// <param name="nod"></param>
         /// <param name="word"></param>
         /// <param name="index"></param>
         /// <returns></returns>
-        public bool SearchWord(ref Node nod, string word, int index)
+        public bool SearchWordRec(ref Node nod, string word, int index)
         {
             // Si la taille du mot est atteinte c'est bon.
             if (index >= word.Length) return true;
@@ -311,16 +314,22 @@ namespace LexicogTree
                 if (word[index] == nod.Letter)
                 {
                     // Si c'est bon on boucle sur le fils
-                    return SearchWord(ref nod.SonNode, word, ++index);
+                    return SearchWordRec(ref nod.SonNode, word, ++index);
                 }
                 else
                 {
                     // Sinon on regarde sur le frère si il n'a pas la bonne lettre
-                    return SearchWord(ref nod.BrotherNode, word, index);
+                    return SearchWordRec(ref nod.BrotherNode, word, index);
                 }
             }
         }
 
+        /// <summary>
+        /// Print all words in the tree
+        /// </summary>
+        /// <param name="n"></param>
+        /// <param name="nbPassed"></param>
+        /// <param name="isUnderline"></param>
         public void Print(ref Node n, int nbPassed, bool isUnderline)
         {
             int nbSpaces = nbPassed;
@@ -343,7 +352,7 @@ namespace LexicogTree
                 Print(ref n.SonNode, ++nbPassed, false);
                 if (n.Letter == '#')
                 {
-                    Debug.WriteLine("");
+                    Debug.WriteLine(string.Empty);
                 }
                 Print(ref n.BrotherNode, nbSpaces, true);
             }
